@@ -25,6 +25,7 @@
     "electron-builder": "26.15.3"
   },
   "build": {
+    "npmRebuild": false,
     "appId": "com.keybridge.desktop",
     "productName": "KeyBridge",
     "asarUnpack": [
