@@ -1,0 +1,9 @@
+{
+  "name": "keybridge-docker-receiver",
+  "version": "0.4.1",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "ws": "8.21.3"
+  }
+}

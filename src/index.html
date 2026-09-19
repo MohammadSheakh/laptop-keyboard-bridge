@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self';" />
+  <title>KeyBridge</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <p class="eyebrow">LOCAL KEYBOARD BRIDGE</p>
+        <h1>KeyBridge</h1>
+        <p class="subtitle">Switch one laptop keyboard between your Windows laptop and Linux PC.</p>
+      </div>
+      <div id="globalStatus" class="status neutral">Idle</div>
+    </header>
+
+    <section class="mode-switch" aria-label="Choose mode">
+      <button id="showSender" class="mode active">Windows · Sender</button>
+      <button id="showReceiver" class="mode">Linux · Receiver</button>
+    </section>
+
+    <section id="senderPanel" class="panel">
+      <div class="panel-heading">
+        <div>
+          <p class="step">ON THE WINDOWS LAPTOP</p>
+          <h2>Connect to your Linux PC</h2>
+        </div>
+        <span id="senderBadge" class="badge">Disconnected</span>
+      </div>
+
+      <div class="form-grid">
+        <label>
+          Linux PC IP address
+          <input id="targetHost" type="text" placeholder="192.168.1.25" autocomplete="off" />
+        </label>
+        <label>
+          Port
+          <input id="targetPort" type="number" value="39393" min="1" max="65535" />
+        </label>
+        <label>
+          Pairing code
+          <input id="pairingCode" type="text" inputmode="numeric" maxlength="6" placeholder="123456" autocomplete="off" />
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="connectBtn" class="primary">Connect</button>
+        <button id="disconnectBtn" class="secondary" disabled>Disconnect</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="target-card">
+        <div>
+          <span class="target-label">ACTIVE KEYBOARD DEVICE</span>
+          <strong id="activeDevice">Windows laptop</strong>
+          <p id="targetHint">Laptop receives input normally. Press Ctrl + Alt + A to switch to the PC.</p>
+        </div>
+        <button id="shareBtn" class="primary" disabled>Switch to PC</button>
+      </div>
+
+      <div class="notice">
+        <strong>Switch:</strong> <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd>. Release all held keys to complete the switch.<br />
+        <strong>Emergency return:</strong> <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Esc</kbd>.
+      </div>
+    </section>
+
+    <section id="receiverPanel" class="panel hidden">
+      <div class="panel-heading">
+        <div>
+          <p class="step">ON THE LINUX PC</p>
+          <h2>Accept laptop keyboard input</h2>
+        </div>
+        <span id="receiverBadge" class="badge">Stopped</span>
+      </div>
+
+      <label class="port-label">
+        Listening port
+        <input id="listenPort" type="number" value="39393" min="1" max="65535" />
+      </label>
+
+      <div class="actions">
+        <button id="startReceiverBtn" class="primary">Start receiver</button>
+        <button id="stopReceiverBtn" class="secondary" disabled>Stop receiver</button>
+      </div>
+
+      <div id="receiverDetails" class="receiver-details hidden">
+        <div class="detail-card">
+          <span>Pairing code</span>
+          <strong id="receiverCode">------</strong>
+        </div>
+        <div class="detail-card grow">
+          <span>PC address</span>
+          <strong id="receiverAddresses">No LAN address found</strong>
+        </div>
+        <div class="detail-card">
+          <span>Connected laptops</span>
+          <strong id="clientCount">0</strong>
+        </div>
+        <div class="detail-card">
+          <span>Session</span>
+          <strong id="receiverPlatform">Linux</strong>
+        </div>
+      </div>
+
+      <div class="notice">
+        Allow the receiver port only on your trusted/private LAN. For this MVP, Linux input injection is most reliable under an <strong>X11</strong> session.
+      </div>
+    </section>
+
+    <section class="security-note">
+      <h3>Privacy by design</h3>
+      <p>KeyBridge does not store keystrokes. The Windows sender forwards input only while the Linux PC is the active target. Pairing is required before input can be accepted.</p>
+    </section>
+
+    <p id="warningBox" class="warning hidden"></p>
+    <p id="errorBox" class="error hidden"></p>
+  </main>
+  <script src="renderer.js"></script>
+</body>
+</html>

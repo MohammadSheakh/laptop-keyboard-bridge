@@ -1,0 +1,55 @@
+{
+  "name": "laptop-keyboard-bridge",
+  "version": "0.4.1",
+  "description": "Switch a Windows laptop keyboard between the laptop and a Linux PC over a trusted LAN.",
+  "main": "src/main.js",
+  "author": "OpenAI",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "docker:receiver": "docker compose --env-file .env.docker up -d --build",
+    "docker:logs": "docker compose --env-file .env.docker logs -f keybridge-receiver",
+    "docker:stop": "docker compose --env-file .env.docker down",
+    "dist:win": "electron-builder --win nsis",
+    "dist:portable": "electron-builder --win portable",
+    "dist:linux": "electron-builder --linux AppImage deb",
+    "test": "node --test",
+    "check": "node --check src/core.js && node --check src/linux-keymap.js && node --check src/docker-receiver.js && node --check src/main.js && node --check src/preload.js && node --check src/renderer.js && node --test"
+  },
+  "dependencies": {
+    "@fainthit/uiohook-napi-suppress": "1.6.4",
+    "ws": "8.21.3"
+  },
+  "devDependencies": {
+    "electron": "44.4.2",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.keybridge.desktop",
+    "productName": "KeyBridge",
+    "asarUnpack": [
+      "node_modules/@fainthit/uiohook-napi-suppress/**"
+    ],
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

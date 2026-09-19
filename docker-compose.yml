@@ -1,0 +1,16 @@
+services:
+  keybridge-receiver:
+    build:
+      context: .
+      dockerfile: docker/receiver.Dockerfile
+    container_name: keybridge-receiver
+    restart: unless-stopped
+    init: true
+    environment:
+      KEYBRIDGE_PORT: "39393"
+      KEYBRIDGE_BIND: "0.0.0.0"
+      KEYBRIDGE_PAIRING_CODE: "${KEYBRIDGE_PAIRING_CODE:?Set KEYBRIDGE_PAIRING_CODE in .env.docker}"
+    ports:
+      - "${KEYBRIDGE_HOST_PORT:-39393}:39393"
+    devices:
+      - "/dev/uinput:/dev/uinput"

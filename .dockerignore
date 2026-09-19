@@ -1,0 +1,10 @@
+.git
+.gitignore
+node_modules
+dist
+release
+*.zip
+.env
+.env.*
+!.env.docker.example
+npm-debug.log*
